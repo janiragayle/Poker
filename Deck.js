@@ -33,6 +33,7 @@ class Deck{
     }
 };
 
+/*
 const deck = new Deck();
 
 let i = 51;
@@ -40,3 +41,4 @@ while(i >= 0){
     console.log(deck.deal());
     i--;
 }
+*/

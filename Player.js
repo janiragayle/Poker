@@ -1,30 +1,29 @@
-
-class Player{
+class Player {
     
     constructor(){
-        const hand = [];
-        let bankroll = 5;
-        let bet = 0;  
+        this.hand = [];
+        this.bankroll = 5;
+        this.bet = 0;  
     }
 
     addCard(c){
-        hand.push(c);
+        this.hand.push(c);
     }
 
     setCard(index, c){
-        hand.splice(index, 0, c);
+        this.hand.splice(index, 0, c);
     }
     
     removeCard(c){
-        hand.splice(c);
+        this.hand.splice(c);
     }
 
     bets(amt){
-        bet = amt;
+        this.bet = amt;
     }
 
     winnings(odds){
-        bankrolls += odds;
+        this.bankrolls += odds;
     }
 
     getBankroll(){
@@ -36,6 +35,6 @@ class Player{
     }
 
     getCard(c){ //may be wrong
-        return hand[c];
+        return this.hand[c];
     }
 }

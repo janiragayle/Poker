@@ -1,16 +1,18 @@
 class Card {
+
+    static suits = ["Clubs", "Diamonds", "Hearts", "Spades"];
+    static ranks = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"];
+    
     constructor(s, r){
         this.suit = s;
         this.rank = r;
-        const suits = ["Clubs", "Diamonds", "Hearts", "Spades"];
-        const ranks = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"];
     }
 
 
     //compareTo function 
 
     toString(){
-        return ranks[rank-1] + " of " + suits[suit - 1];
+        return Card.ranks[this.rank-1] + " of " + Card.suits[this.suit-1];
     }
 
     getRank(){
