@@ -2,7 +2,7 @@ class Player {
     
     constructor(){
         this.hand = [];
-        this.bankroll = 5;
+        this.bankroll = 50;
         this.bet = 0;  
     }
 
@@ -30,7 +30,7 @@ class Player {
         return this.bankroll;
     }
 
-    takeBankroll(b){ //
+    takeBankroll(b){ //removes bets from player's bankroll
         return this.bankroll -= b;
     }
 

@@ -24,16 +24,11 @@ class Deck{
     }
 
     deal(){
-        if(top > 51){ // may need to change to < 51
-            return new Card(0,0);
-        }
-        else{
-            return cards.pop(); //gets rid of card 
-        }
+        return cards.pop();
     }
 };
 
-/*
+/*]]
 const deck = new Deck();
 
 let i = 51;
