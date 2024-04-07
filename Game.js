@@ -10,11 +10,11 @@ class Game {
         this.deck = new Deck();
 
         for (const inputCard of testHand){
-            console.log(inputCard);
+            //console.log(inputCard);
             let suit = 0;
             let s = inputCard.charAt(0);
 
-            console.log(s);
+            //console.log(s);
 
             if (s === "c"){
                 suit = 1;
@@ -98,6 +98,8 @@ class Game {
         console.log(this.checkHand(playersHand));
 
     }
+
+
     
     /****************************** HELPER FUNCTIONS *****************************/
 
@@ -147,6 +149,9 @@ class Game {
         } else if (this.consecutive(playersHand) === 2 && this.flush(playersHand) == true){
             return "Straight Flush";
 
+        } else if (this.full(playersHand) === true){
+            return "Full House";
+
         } else if (this.consecutive(playersHand) === 0 && this.flush(playersHand) == true){
             return "Flush";
 
@@ -158,15 +163,17 @@ class Game {
         
     }
 
-    consecutive(playersHand){
+    consecutive(playersHand){ //checks if cards are in consec order
         let con = 0; 
 
+        //checks for royal flush
         if (playersHand[0].getRank() == 1 && playersHand[1].getRank() == 10){
             for (let i=1; i<4; i++){
                 if (playersHand[i].getRank()+1 == playersHand[i+1].getRank()){
                     con += 1;
                 }
             }
+        //checks for straight or straight flush
         }else{
             for (let i=0; i<4; i++){
                 if (playersHand[i].getRank()+1 == playersHand[i+1].getRank()){
@@ -184,7 +191,7 @@ class Game {
         }
     }
 
-    flush(playersHand){
+    flush(playersHand){ //checks if all the suits are the same
         let match = 0;
 
         for (let i=0; i<4; i++){
@@ -198,6 +205,25 @@ class Game {
         else
             return false;
     }
+
+    full(playersHand){
+        //example: 2 2 4 4 4
+        if(playersHand[0].getRank() === playersHand[1].getRank() 
+            && playersHand[2].getRank() === playersHand[3].getRank() 
+            && playersHand[3].getRank() === playersHand[4].getRank()){
+            return true;
+        }
+        //example: 2 2 2 4 4
+        else if (playersHand[0].getRank() === playersHand[1].getRank() 
+        && playersHand[1].getRank() === playersHand[2].getRank() 
+        && playersHand[3].getRank() === playersHand[4].getRank()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
 
 
 }
