@@ -18,28 +18,34 @@ class Game {
 
             if (s === "c"){
                 suit = 1;
-                console.log(suit);
+                //console.log("This is the suit: " + suit);
             }
             if (s === "d"){
                 suit = 2;
-                console.log(suit);
+                //console.log("This is the suit: " + suit);
             }
             if (s === "h"){
                 suit = 3;
-                console.log(suit);
+                //console.log("This is the suit: " + suit);
             }
             if (s === "s"){
                 suit = 4;
-                console.log(suit);
+                //console.log("This is the suit: " + suit);
             }
     
-            let rank = parseInt(inputCard.charAt(1));
-            console.log(rank);
+            let rank = parseInt(inputCard.substring(1,3));
+            //console.log("This is the rank: " + rank);
 
             const c = new Card(suit, rank);
             this.player.addCard(c);
         }
-        console.log("This is the first card: " + this.player.getCard(1));
+        /*
+        console.log("This is the 1st card: " + this.player.getCard(0));
+        console.log("This is the 2nd card: " + this.player.getCard(1));
+        console.log("This is the 3rd card: " + this.player.getCard(2));
+        console.log("This is the 4th card: " + this.player.getCard(3));
+        console.log("This is the 5th card: " + this.player.getCard(4));
+        */
     }
     
 
@@ -133,11 +139,23 @@ class Game {
             }
         });
 
-        if (this.consecutive(playersHand) === 1 || this.consecutive(playersHand) === 2){
-            return "Straight";
-        }
-
         console.log(playersHand);
+
+        if (this.consecutive(playersHand) === 1 && this.flush(playersHand) == true){
+            return "Royal FLush";
+
+        } else if (this.consecutive(playersHand) === 2 && this.flush(playersHand) == true){
+            return "Straight Flush";
+
+        } else if (this.consecutive(playersHand) === 0 && this.flush(playersHand) == true){
+            return "Flush";
+
+        } else if (this.consecutive(playersHand) === 2 && this.flush(playersHand) == false || this.consecutive(playersHand) === 1 && this.flush(playersHand) == false){
+            return "Straight";
+
+        }    
+
+        
     }
 
     consecutive(playersHand){
@@ -159,12 +177,28 @@ class Game {
 
         if (con === 3){
             return 1;//royal flush or straight flush or straight
-        }else if (con == 8){
+        }else if (con === 8){
             return 2;//straight flush or straight
         }else{
             return 0;//not consecutive
         }
     }
+
+    flush(playersHand){
+        let match = 0;
+
+        for (let i=0; i<4; i++){
+            if(playersHand[i].getSuit() === playersHand[i+1].getSuit()){
+                match +=1;
+            }
+        }
+
+        if(match === 4)
+            return true;
+        else
+            return false;
+    }
+
 
 }
 
