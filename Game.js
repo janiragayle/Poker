@@ -149,6 +149,9 @@ class Game {
         } else if (this.consecutive(playersHand) === 2 && this.flush(playersHand) == true){
             return "Straight Flush";
 
+        } else if (this.fourKind(playersHand) === true){
+            return "Four of a Kind";
+
         } else if (this.full(playersHand) === true){
             return "Full House";
 
@@ -206,7 +209,7 @@ class Game {
             return false;
     }
 
-    full(playersHand){
+    full(playersHand){ //checks for 2 of one rank and three of another rank
         //example: 2 2 4 4 4
         if(playersHand[0].getRank() === playersHand[1].getRank() 
             && playersHand[2].getRank() === playersHand[3].getRank() 
@@ -224,7 +227,25 @@ class Game {
         }
     }
     
+    fourKind(playersHand){ //checks for four with the same rank
+        //example 2 2 2 2 4
+        if(playersHand[0].getRank() === playersHand[1].getRank() 
+        && playersHand[1].getRank() === playersHand[2].getRank() 
+        && playersHand[2].getRank() === playersHand[3].getRank()){
+            return true;
 
+        }
+        //example 4 5 5 5 5
+        else if(playersHand[1].getRank() === playersHand[2].getRank() 
+        && playersHand[2].getRank() === playersHand[3].getRank() 
+        && playersHand[3].getRank() === playersHand[4].getRank()){
+            return true;
+
+        } 
+        else{
+            return false;
+        }
+    }
 
 }
 
