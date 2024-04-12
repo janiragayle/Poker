@@ -90,6 +90,13 @@ class Game {
                 }
             }
 
+            alert("Here is your final hand: \n\n" + 
+                                    this.player.getCard(0) + "\n" +
+                                    this.player.getCard(1) + "\n" +
+                                    this.player.getCard(2) + "\n" +
+                                    this.player.getCard(3) + "\n" +
+                                    this.player.getCard(4) + "\n\n");
+
 
             const playersHand = [];
 
