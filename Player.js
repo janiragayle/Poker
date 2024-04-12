@@ -11,18 +11,14 @@ class Player {
     }
 
     setCard(index, c){ //sets the card at the given index to card c
-        this.hand.splice(index, 0, c);
-    }
-    
-    removeCard(c){ // removes card c from player's hand
-        this.hand.splice(c);
+        this.hand[index] = c;
     }
 
     bets(amt){ //sets bet to players bet
         this.bet = amt;
     }
 
-    winnings(odds){ // adjusts player's winnings to bankroll
+    adjustBankroll(odds){ // adjusts player's winnings to bankroll
         this.bankroll += odds;
     }
 
@@ -38,7 +34,20 @@ class Player {
         return this.bet;
     }
 
-    getCard(c){ //may be wrong
-        return this.hand[c];
+    getCard(index){ //returns card at given index
+        return this.hand[index];
     }
+
+    getHand(){ //returns entire hand
+        return this.hand;
+    }
+    
+    clearHand(){ //clears entire hand for another round
+        let i = 5;
+        while (i != 0){
+            this.hand.shift();
+            i--;
+        }
+    }
+
 }

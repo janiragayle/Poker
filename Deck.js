@@ -10,9 +10,9 @@ class Deck{
         }
     }
 
+
     shuffle(){
        let randomIndex = 0;
-       
        
        for(let i = 51; i>= 0; i--){
         randomIndex = Math.floor((Math.random() * i+1) + 1);
@@ -23,8 +23,9 @@ class Deck{
        }
     }
 
-    deal(){
-        return cards.pop();
+    deal(index){
+        
+        return cards[index];
     }
 };
 

@@ -3,7 +3,8 @@
 class Game {
     
      //allows you to give user a specific hand to check program is running correctly
-    constructor(testHand){ 
+    /*
+     constructor(testHand){ 
         //testhand constructor
         //takes in set hand from user
         this.player = new Player();
@@ -39,22 +40,15 @@ class Game {
             const c = new Card(suit, rank);
             this.player.addCard(c);
         }
-        /*
-        console.log("This is the 1st card: " + this.player.getCard(0));
-        console.log("This is the 2nd card: " + this.player.getCard(1));
-        console.log("This is the 3rd card: " + this.player.getCard(2));
-        console.log("This is the 4th card: " + this.player.getCard(3));
-        console.log("This is the 5th card: " + this.player.getCard(4));
-        */
     }
-    
+    */
 
-    /*
+    
     constructor(){
         this.player = new Player();
         this.deck = new Deck();
     }
-    */
+    
 
     play(){
 
@@ -66,30 +60,36 @@ class Game {
             this.player.bets(bets); //take bet
             this.player.takeBankroll(bets);//subtract bet from bankroll
 
-            console.log("You have " + this.player.getBankroll() 
+            alert("You have " + this.player.getBankroll() 
                         + " tokens remaining"); //tell player remaining bankroll
     
-            /*           
+                     
             this.deck.shuffle();//shuffle cards
 
             let i = 0;
             while (i < 5){//adds 5 random cards to player's hand 
-                this.player.addCard(this.deck.deal());
-                i = i + 1;
+                this.player.addCard(this.deck.deal(i));
+                i++;
             }
-            
-            console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
+            //alert(this.player.getHand());
+            //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
             
             for (let i=0; i<5; i++){//asks if they want to change any of their cards
-                let answer = prompt("Do you want to change #" + (i+1) + " in your hand? \nEnter y/n");
+                let answer = prompt("Here is your hand: \n\n" + 
+                                    this.player.getCard(0) + "\n" +
+                                    this.player.getCard(1) + "\n" +
+                                    this.player.getCard(2) + "\n" +
+                                    this.player.getCard(3) + "\n" +
+                                    this.player.getCard(4) + "\n\n" +
+                    "Do you want to change #" + (i+1) + " in your hand? \n\n Enter y/n" );
 
                 if(answer === "y"){
-                    this.dealHand(i);
-                    console.log("\n");
-                    console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
+                    this.changeHand(i);
+                    //console.log("\n");
+                    //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
                 }
             }
-            */
+
 
             const playersHand = [];
 
@@ -99,11 +99,11 @@ class Game {
 
             const score = this.checkHand(playersHand);
 
-            const won = /*this.winnings(score, this.player.getBets());*/ 0;
+            const won = this.winnings(score, this.player.getBet());
 
-            console.log("Thats a " + score);
-            console.log("You won " + won + " tokens!");
-            console.log("Your bankroll is:  " + this.player.getBankroll() + " tokens.");
+            this.player.adjustBankroll(won);
+
+            alert("Thats a " + score + " \n\nYou won " + won + " tokens! \n\nYour bankroll is:  " + this.player.getBankroll() + " tokens.");
             
             if (prompt("Do you want to play again?") === "n"){
                 break;
@@ -112,36 +112,72 @@ class Game {
                 console.log("Sorry bud, you're out of tokens. Head on home.");
                 break;
             }
+            else{
+                this.player.clearHand();
+            }
         }
 
     }
 
-
     
     /****************************** HELPER FUNCTIONS *****************************/
 
-    dealHand(index){ 
+    changeHand(index){ 
     //if player chooses to change a card in their hand
     //this method will check if the new card dealt
     //to them already exists in their hand
         this.deck.shuffle();
 
-        const c = this.deck.deal();
-
-        while (c == this.player.getCard()){
-            if (c == this.player.getCard()){
+        let c = this.deck.deal(0);
+        //alert("Here is the potential new card: " + c);
+        while (c === this.player.getCard(index) ){
+            if (c === this.player.getCard(index)){
                 this.deck.shuffle();
+                c = this.deck.deal(0);
             }
         }
 
         this.player.setCard(index, c);
+
+        /*
+        alert("Here is the hand the new hand: \n\n" + 
+        this.player.getCard(0) + "\n" +
+        this.player.getCard(1) + "\n" +
+        this.player.getCard(2) + "\n" +
+        this.player.getCard(3) + "\n" +
+        this.player.getCard(4) + "\n\n");
+        */
     }
 
     winnings(score, bet){
 
+
+        if(score === 'Royal Flush'){
+            return bet*250;
+        } else if(score === 'Straight Flush'){
+            return bet*50;
+        } else if(score === 'Four of a Kind'){
+            return bet*25;
+        } else if(score === 'Full House'){
+            return bet*6;
+        } else if(score === 'Flush'){
+            return bet*5;
+        } else if(score === 'Straight'){
+            return bet*4;
+        } else if(score === 'Three of a Kind'){
+            return bet*3;
+        } else if(score === 'Two Pairs'){
+            return bet*2;
+        } else if(score === 'One Pairs'){
+            return bet*1;
+        } else {
+            return 0;
+        }
     }
 
     checkHand(playersHand){
+        
+ 
         playersHand.sort(function(card1, card2){
             if(card1.rank > card2.rank){
                 return 1;
@@ -200,16 +236,16 @@ class Game {
         let con = 0; 
 
         //checks for royal flush
-        if (playersHand[0].getRank() == 1 && playersHand[1].getRank() == 10){
-            for (let i=1; i<4; i++){
-                if (playersHand[i].getRank()+1 == playersHand[i+1].getRank()){
+        if (playersHand[0].getRank() === 1 && playersHand[1].getRank() === 10){
+            for (let i=2; i<4; i++){
+                if (playersHand[i].getRank()+1 === playersHand[i+1].getRank()){
                     con += 1;
                 }
             }
         //checks for straight or straight flush
         }else{
             for (let i=0; i<4; i++){
-                if (playersHand[i].getRank()+1 == playersHand[i+1].getRank()){
+                if (playersHand[i].getRank()+1 === playersHand[i+1].getRank()){
                     con += 2;
                 }
             }
@@ -332,5 +368,5 @@ class Game {
 
 }
 
-const game = new Game(prompt().split(" ")).play();
+const game = new Game(/*prompt().split(" ")*/).play();
 
