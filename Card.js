@@ -9,8 +9,6 @@ class Card {
     }
 
 
-
-
     toString(){
         return Card.ranks[this.rank-1] + " of " + Card.suits[this.suit-1];
     }
