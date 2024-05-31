@@ -1,4 +1,8 @@
+let newText = document.querySelector('p');
+const visibleText = document.querySelector('.text');
 
+newText.textContent = "Hi";
+visibleText.appendChild(newText);  
 
 class Game {
     
@@ -62,7 +66,8 @@ class Game {
 
             alert("You have " + this.player.getBankroll() 
                         + " tokens remaining"); //tell player remaining bankroll
-    
+            
+            
                      
             this.deck.shuffle();//shuffle cards
 
@@ -375,5 +380,4 @@ class Game {
 
 }
 
-//const game = new Game(/*prompt().split(" ")*/).play();
-
+const game = new Game(/*prompt().split(" ")*/).play();

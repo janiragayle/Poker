@@ -1,45 +1,27 @@
-html{
-    box-sizing: border-box;
-}
-
-*, *:before, *:after {
-    box-sizing: inherit;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 0;
-    background-image: linear-gradient(260deg, pink 0%, rgb(146, 199, 255) 100%);
+body{
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: rgb(181, 73, 91);
 }
 
 .wrapper{
-    border: 1px solid black;
-    background-color: pink;
-    margin: 0 auto;
-    max-width: 1000px;
-    max-height: 2000px;
+    background-color: rgb(245, 110, 133);
+    border-radius: 20px;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
 
 }
 
 .cards{
-    border: 1px solid black;
     display: flex;
-    flex-wrap: wrap;
-    padding: 20px;
-}
-
-.card{
-    width: 20%;
-    padding: 20px;
-}
-
-h1{
+    justify-content: center;
     text-align: center;
 }
 
-@media all and (max-width:1000px) {}
-@media all and (max-width:500px) {}
+.card{
+    height: auto;
+    width: 150px;
+    margin: 10px;
+}
