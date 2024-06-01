@@ -5,23 +5,82 @@ body{
     background-color: rgb(181, 73, 91);
 }
 
+
 .wrapper{
     background-color: rgb(245, 110, 133);
     border-radius: 20px;
     text-align: center;
     margin: 0;
-    padding: 10px;
-
+    padding: 20px;
+    
 }
+
+
+.text{
+    color:  azure;
+}
+
+p{
+    font-size: 20px;
+    display: none;
+}
+
+.newBets input[type="text"]{
+    display: none;
+}
+
+.buttons input[type="button"]{
+    font-size: 20;
+    color: azure;
+    padding: 10px;
+    border: 2px solid rgb(181, 73, 91);
+    border-radius: 10px;
+    background-color: rgb(181, 73, 91);
+    margin: 10px;
+    cursor: pointer;
+    transition: transform(0.2s);
+    display: none;
+}
+
+.buttons input[type="button"]:hover{
+    transform: scale(1.05);
+}
+/*Cards*/
 
 .cards{
     display: flex;
     justify-content: center;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .card{
     height: auto;
     width: 150px;
-    margin: 10px;
+    margin: 10px 10px;
+    transition: transform(0.2);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0px 10px rgb(0, 0 , 0, 1);
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+/*Points System*/
+
+.points{
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    
+}
+
+.tokens, .currentBets {
+    color: azure;
+    padding: 10px;
+    border: 2px solid rgb(181, 73, 91);
+    border-radius: 10px;
+    background-color: rgb(181, 73, 91);
 }

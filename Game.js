@@ -1,7 +1,7 @@
 let newText = document.querySelector('p');
 const visibleText = document.querySelector('.text');
 
-newText.textContent = "Hi";
+newText.textContent = "You have 50 tokens";
 visibleText.appendChild(newText);  
 
 class Game {
@@ -380,4 +380,4 @@ class Game {
 
 }
 
-const game = new Game(/*prompt().split(" ")*/).play();
+//const game = new Game(/*prompt().split(" ")*/).play();
