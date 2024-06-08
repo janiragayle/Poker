@@ -4,6 +4,7 @@ const visibleText = document.querySelector('.text');
 newText.textContent = "You have 50 tokens";
 visibleText.appendChild(newText);  
 
+
 class Game {
     
      //allows you to give user a specific hand to check program is running correctly
@@ -380,4 +381,4 @@ class Game {
 
 }
 
-//const game = new Game(/*prompt().split(" ")*/).play();
+const game = new Game(/*prompt().split(" ")*/).play();
