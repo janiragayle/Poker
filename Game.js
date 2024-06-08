@@ -381,4 +381,4 @@ class Game {
 
 }
 
-const game = new Game(/*prompt().split(" ")*/).play();
+//const game = new Game(/*prompt().split(" ")*/).play();
