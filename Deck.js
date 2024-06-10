@@ -14,8 +14,8 @@ class Deck{
     shuffle(){
        let randomIndex = 0;
        
-       for(let i = 51; i>= 0; i--){
-        randomIndex = Math.floor((Math.random() * i+1) + 1);
+       for(let i = 0; i < 52 ; i++){
+        randomIndex = Math.floor((Math.random() * (51 - 1)) + 1);
 
         let temp = cards[i];
         cards[i] = cards[randomIndex];
@@ -24,7 +24,6 @@ class Deck{
     }
 
     deal(index){
-        
         return cards[index];
     }
 };

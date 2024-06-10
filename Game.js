@@ -1,16 +1,20 @@
 /*************** HTML manipulation *****************/
 
 const yesNoButtons = document.querySelector(".yesNo");
+const yesButton = document.getElementById("yes")
+const noButton = document.getElementById("no")
 const playButton = document.querySelector(".play");
+const startOverButton = document.querySelector(".startOver");
 const newBets = document.querySelector(".newBets");
 const betInput = document.getElementById("bet");
 const betButton = document.getElementById("submit");
 const tokens = document.querySelector(".tokens"); //tokens.innerText = `Number of Tokens: ${newtokens}`;
 const currentBet = document.querySelector(".currentBets");
 const cardImages = [...document.querySelectorAll('.card')];
-console.log(cardImages);
 
 let newP = document.querySelector("p");
+let breakP = document.createElement("br");
+let breakP2 = document.createElement("br");
 const visibleText = document.querySelector(".text");
 
 let newH1 = document.querySelector("h1");
@@ -106,12 +110,33 @@ class Game {
     }); 
   }
 
+  async waitForYesNo(){
+    return new Promise((resolve) => {
+        yesNoButtons.addEventListener("click", (e) => {
+            const answer = e.target.id;
+            resolve(answer);
+        }, {once: true});
+    }); 
+  }
+
+  async startOver(){
+    return new Promise((resolve) => {
+        startOverButton.addEventListener("click", (e) => {
+            startOverButton.classList.remove("start-Over-Show");
+            setGame();
+        }, {once: true});
+    }); 
+  }
+  
+
+
+
+
   async play() {
     while (true) {
       //const bets = prompt("You have " + this.player.getBankroll() +
       //  " tokens. \n How much do you want to bet?"); //tell player their bankrol
       newP.textContent = `How many tokens would you like to bet?`;
-      visibleText.appendChild(newP);
       newBets.classList.add("show-Bet");
 
         const bet = await this.waitForBet();
@@ -123,18 +148,74 @@ class Game {
         
         newBets.classList.remove("show-Bet");
 
-      this.deck.shuffle();
+      
 
       let i = 0;
 
+      this.deck.shuffle();
       while (i < 5) {
+        
         //adds 5 random cards to player's hand
         this.player.addCard(this.deck.deal(i));
         this.updateCardImage(this.player.getCard(i), i);
         i++;
       }
 
-      break;
+      console.log(this.player.getHand());
+
+      //asks if they want to change any of their cards
+      for (let i = 0; i < 5; i++) { 
+        newP.textContent = `Do you want to change #${i + 1} in your hand?`;
+        yesNoButtons.classList.add("show-yesNo");
+
+        const answer = await this.waitForYesNo();
+
+        if(answer === 'yes'){
+          this.changeHand(i);
+          this.updateCardImage(this.player.getCard(i), i);
+        }
+      }
+
+      const playersHand = [];
+
+      for (let i = 0; i < 5; i++) {
+        playersHand.push(this.player.getCard(i));
+      }
+
+      const score = this.checkHand(playersHand);
+      const won = this.winnings(score, this.player.getBet());
+      this.player.adjustBankroll(won);
+      updateTokens(this.player.getBankroll());
+      updateBets(0);
+
+      let newP2 = document.createTextNode("Do you want to play again?");
+      let space = document.createTextNode(" ");
+      newP.textContent = `You scored a ${score}! You won ${won} tokens!`;
+      newP.appendChild(breakP);
+      newP.appendChild(space);
+      newP.appendChild(breakP2);
+      newP.appendChild(newP2);
+
+      const answer = await this.waitForYesNo();
+
+      console.log("out of promise");
+      if (answer === "no") {
+        break;
+      } else if (this.player.getBankroll() === 0) {
+        newP.textContent = `Sorry bud, you're out of tokens. Head on home.`;
+        this.player.clearHand();
+        this.resetCardImages();
+        yesNoButtons.classList.remove("show-yesNo");
+        startOverButton.classList.add("start-Over-Show");
+        startOverButton.addEventListener("click", setGame);
+        await this.startOver();
+      } else {
+        this.player.clearHand();
+        this.resetCardImages();
+        yesNoButtons.classList.remove("show-yesNo");
+      }
+      
+    
       /*
       this.player.bets(bets); //take bet
       this.player.takeBankroll(bets); //subtract bet from bankroll
@@ -227,7 +308,7 @@ class Game {
 
   /****************************** HELPER FUNCTIONS *****************************/
 
-  updateCardImage( card, index){
+  updateCardImage(card, index){
     
     const cardString = `${card}`.split(" ");
     const rank = cardString[0];
@@ -235,10 +316,18 @@ class Game {
     cardImages[index].src = `/card_deck/${rank}_of_${suit}.png`;
 
 
-    console.log({cardString});
-
-
+    //console.log({cardString});
   }
+
+  resetCardImages(){
+    let i = 4;
+    console.log(cardImages);
+     while(i > -1){
+       cardImages[i].src = `/card_deck/card_back.png`;
+       i--;
+     }
+  }
+
   changeHand(index) {
     //if player chooses to change a card in their hand
     //this method will check if the new card dealt
@@ -283,7 +372,7 @@ class Game {
       return bet * 3;
     } else if (score === "Two Pairs") {
       return bet * 2;
-    } else if (score === "One Pairs") {
+    } else if (score === "One Pair") {
       return bet * 1;
     } else {
       return 0;
@@ -339,7 +428,7 @@ class Game {
     } else if (this.twoPair(playersHand) === true) {
       return "Two Pairs";
     } else if (this.onePair(playersHand) === true) {
-      return "One Pairs";
+      return "One Pair";
     } else {
       return "No Pair";
     }

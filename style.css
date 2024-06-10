@@ -68,7 +68,15 @@ p{
     display: none;
 }
 
-.play input[type="button"]{
+.yesNo input[type="button"]:hover{
+    transform: scale(1.05);
+}
+
+.show-yesNo input[type="button"]{
+    display: inline;
+}
+
+.play input[id="play"]{
     font-size: 20;
     color: azure;
     padding: 10px;
@@ -80,8 +88,25 @@ p{
     transition: transform(0.2s); 
 }
 
-.play-Clicked input[type="button"]{
+.startOver input[id="start-over"]{
+    font-size: 20;
+    color: azure;
+    padding: 10px;
+    border: 2px solid rgb(181, 73, 91);
+    border-radius: 10px;
+    background-color: rgb(181, 73, 91);
+    margin: 10px;
+    cursor: pointer;
+    transition: transform(0.2s); 
     display: none;
+}
+
+.play-Clicked input[id="play"]{
+    display: none;
+}
+
+.start-Over-Show input[id="start-over"]{
+    display: inline;
 }
 
 .buttons input[type="button"]:hover ,.play input[type="button"]:hover{
