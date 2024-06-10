@@ -1,14 +1,58 @@
-let newText = document.querySelector('p');
-const visibleText = document.querySelector('.text');
+/*************** HTML manipulation *****************/
 
-newText.textContent = "You have 50 tokens";
-visibleText.appendChild(newText);  
+const yesNoButtons = document.querySelector(".yesNo");
+const playButton = document.querySelector(".play");
+const newBets = document.querySelector(".newBets");
+const betInput = document.getElementById("bet");
+const betButton = document.getElementById("submit");
+const tokens = document.querySelector(".tokens"); //tokens.innerText = `Number of Tokens: ${newtokens}`;
+const currentBet = document.querySelector(".currentBets");
+const cardImages = [...document.querySelectorAll('.card')];
+console.log(cardImages);
 
+let newP = document.querySelector("p");
+const visibleText = document.querySelector(".text");
+
+let newH1 = document.querySelector("h1");
+
+/* Functions */
+
+function updateTokens(newTokens) {
+  //updates the tokens throughout the game
+  tokens.innerText = `Number of Tokens: ${newTokens}`;
+}
+
+function setGame(){
+    const game = new Game(/*prompt().split(" ")*/);
+    game.play();
+    updateTokens(50); //starts the player with 50 tokens
+    updateBets(0);
+    playButton.classList.add("play-Clicked");
+    //newBets.classList.add("show-Bet");
+    newH1.textContent = ``;
+    visibleText.appendChild(newH1);
+}
+
+function updateBets(newBet){
+    currentBet.innerText = `Current Bet: ${newBet}`;
+}
+
+/* Event Listeners */
+
+//start game when "Lets Play is clicked"
+playButton.addEventListener("click", setGame);
+
+
+
+
+
+
+
+/*************** Game Constructor and Play() function ********************/
 
 class Game {
-    
-     //allows you to give user a specific hand to check program is running correctly
-    /*
+  //allows you to give user a specific hand to check program is running correctly
+  /*
      constructor(testHand){ 
         //testhand constructor
         //takes in set hand from user
@@ -48,111 +92,171 @@ class Game {
     }
     */
 
-    
-    constructor(){
-        this.player = new Player();
-        this.deck = new Deck();
-    }
-    
+  constructor() {
+    this.player = new Player();
+    this.deck = new Deck();
+  }
 
-    play(){
+  async waitForBet(){
+    return new Promise((resolve) => {
+        betButton.addEventListener("click", () => {
+            const bet = parseInt(betInput.value);
+            resolve(bet);
+        }, {once: true});
+    }); 
+  }
 
-        while(1){
+  async play() {
+    while (true) {
+      //const bets = prompt("You have " + this.player.getBankroll() +
+      //  " tokens. \n How much do you want to bet?"); //tell player their bankrol
+      newP.textContent = `How many tokens would you like to bet?`;
+      visibleText.appendChild(newP);
+      newBets.classList.add("show-Bet");
+
+        const bet = await this.waitForBet();
+
+        updateBets(bet);
+        this.player.bets(parseInt(bet));
+        this.player.takeBankroll(parseInt(bet));
+        updateTokens(this.player.getBankroll());
         
-            const bets = prompt("You have " + this.player.getBankroll() + 
-                                " tokens. \n How much do you want to bet?"); //tell player their bankroll
+        newBets.classList.remove("show-Bet");
 
-            this.player.bets(bets); //take bet
-            this.player.takeBankroll(bets);//subtract bet from bankroll
+      this.deck.shuffle();
 
-            alert("You have " + this.player.getBankroll() 
-                        + " tokens remaining"); //tell player remaining bankroll
-            
-            
-                     
-            this.deck.shuffle();//shuffle cards
+      let i = 0;
 
-            let i = 0;
-            while (i < 5){//adds 5 random cards to player's hand 
-                this.player.addCard(this.deck.deal(i));
-                i++;
-            }
-            //alert(this.player.getHand());
-            //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
-            
-            for (let i=0; i<5; i++){//asks if they want to change any of their cards
-                let answer = prompt("Here is your hand: \n\n" + 
-                                    this.player.getCard(0) + "\n" +
-                                    this.player.getCard(1) + "\n" +
-                                    this.player.getCard(2) + "\n" +
-                                    this.player.getCard(3) + "\n" +
-                                    this.player.getCard(4) + "\n\n" +
-                    "Do you want to change #" + (i+1) + " in your hand? \n\n Enter y/n" );
+      while (i < 5) {
+        //adds 5 random cards to player's hand
+        this.player.addCard(this.deck.deal(i));
+        this.updateCardImage(this.player.getCard(i), i);
+        i++;
+      }
 
-                if(answer === "y"){
-                    this.changeHand(i);
-                    //console.log("\n");
-                    //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
-                }
-            }
+      break;
+      /*
+      this.player.bets(bets); //take bet
+      this.player.takeBankroll(bets); //subtract bet from bankroll
 
-            alert("Here is your final hand: \n\n" + 
-                                    this.player.getCard(0) + "\n" +
-                                    this.player.getCard(1) + "\n" +
-                                    this.player.getCard(2) + "\n" +
-                                    this.player.getCard(3) + "\n" +
-                                    this.player.getCard(4) + "\n\n");
+      alert("You have " + this.player.getBankroll() + " tokens remaining"); //tell player remaining bankroll
 
+      this.deck.shuffle(); //shuffle cards
 
-            const playersHand = [];
+      let i = 0;
+      while (i < 5) {
+        //adds 5 random cards to player's hand
+        this.player.addCard(this.deck.deal(i));
+        i++;
+      }
+      //alert(this.player.getHand());
+      //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
 
-            for(let i=0; i<5; i++){
-                playersHand.push(this.player.getCard(i));
-            }
+      for (let i = 0; i < 5; i++) {
+        //asks if they want to change any of their cards
+        let answer = prompt(
+          "Here is your hand: \n\n" +
+            this.player.getCard(0) +
+            "\n" +
+            this.player.getCard(1) +
+            "\n" +
+            this.player.getCard(2) +
+            "\n" +
+            this.player.getCard(3) +
+            "\n" +
+            this.player.getCard(4) +
+            "\n\n" +
+            "Do you want to change #" +
+            (i + 1) +
+            " in your hand? \n\n Enter y/n"
+        );
 
-            const score = this.checkHand(playersHand);
-
-            const won = this.winnings(score, this.player.getBet());
-
-            this.player.adjustBankroll(won);
-
-            alert("Thats a " + score + " \n\nYou won " + won + " tokens! \n\nYour bankroll is:  " + this.player.getBankroll() + " tokens.");
-            
-            if (prompt("Do you want to play again?") === "n"){
-                break;
-            }
-            else if(this.player.getBankroll() === 0){
-                console.log("Sorry bud, you're out of tokens. Head on home.");
-                break;
-            }
-            else{
-                this.player.clearHand();
-            }
+        if (answer === "y") {
+          this.changeHand(i);
+          //console.log("\n");
+          //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
         }
+      }
 
+      alert(
+        "Here is your final hand: \n\n" +
+          this.player.getCard(0) +
+          "\n" +
+          this.player.getCard(1) +
+          "\n" +
+          this.player.getCard(2) +
+          "\n" +
+          this.player.getCard(3) +
+          "\n" +
+          this.player.getCard(4) +
+          "\n\n"
+      );
+
+      const playersHand = [];
+
+      for (let i = 0; i < 5; i++) {
+        playersHand.push(this.player.getCard(i));
+      }
+
+      const score = this.checkHand(playersHand);
+
+      const won = this.winnings(score, this.player.getBet());
+
+      this.player.adjustBankroll(won);
+
+      alert(
+        "Thats a " +
+          score +
+          " \n\nYou won " +
+          won +
+          " tokens! \n\nYour bankroll is:  " +
+          this.player.getBankroll() +
+          " tokens."
+      );
+
+      if (prompt("Do you want to play again?") === "n") {
+        break;
+      } else if (this.player.getBankroll() === 0) {
+        console.log("Sorry bud, you're out of tokens. Head on home.");
+        break;
+      } else {
+        this.player.clearHand();
+      }*/
     }
+  }
 
+  /****************************** HELPER FUNCTIONS *****************************/
+
+  updateCardImage( card, index){
     
-    /****************************** HELPER FUNCTIONS *****************************/
+    const cardString = `${card}`.split(" ");
+    const rank = cardString[0];
+    const suit = cardString[2];
+    cardImages[index].src = `/card_deck/${rank}_of_${suit}.png`;
 
-    changeHand(index){ 
+
+    console.log({cardString});
+
+
+  }
+  changeHand(index) {
     //if player chooses to change a card in their hand
     //this method will check if the new card dealt
     //to them already exists in their hand
+    this.deck.shuffle();
+
+    let c = this.deck.deal(0);
+    //alert("Here is the potential new card: " + c);
+    while (c === this.player.getCard(index)) {
+      if (c === this.player.getCard(index)) {
         this.deck.shuffle();
+        c = this.deck.deal(0);
+      }
+    }
 
-        let c = this.deck.deal(0);
-        //alert("Here is the potential new card: " + c);
-        while (c === this.player.getCard(index) ){
-            if (c === this.player.getCard(index)){
-                this.deck.shuffle();
-                c = this.deck.deal(0);
-            }
-        }
+    this.player.setCard(index, c);
 
-        this.player.setCard(index, c);
-
-        /*
+    /*
         alert("Here is the hand the new hand: \n\n" + 
         this.player.getCard(0) + "\n" +
         this.player.getCard(1) + "\n" +
@@ -160,225 +264,238 @@ class Game {
         this.player.getCard(3) + "\n" +
         this.player.getCard(4) + "\n\n");
         */
+  }
+
+  winnings(score, bet) {
+    if (score === "Royal Flush") {
+      return bet * 250;
+    } else if (score === "Straight Flush") {
+      return bet * 50;
+    } else if (score === "Four of a Kind") {
+      return bet * 25;
+    } else if (score === "Full House") {
+      return bet * 6;
+    } else if (score === "Flush") {
+      return bet * 5;
+    } else if (score === "Straight") {
+      return bet * 4;
+    } else if (score === "Three of a Kind") {
+      return bet * 3;
+    } else if (score === "Two Pairs") {
+      return bet * 2;
+    } else if (score === "One Pairs") {
+      return bet * 1;
+    } else {
+      return 0;
     }
+  }
 
-    winnings(score, bet){
-
-
-        if(score === 'Royal Flush'){
-            return bet*250;
-        } else if(score === 'Straight Flush'){
-            return bet*50;
-        } else if(score === 'Four of a Kind'){
-            return bet*25;
-        } else if(score === 'Full House'){
-            return bet*6;
-        } else if(score === 'Flush'){
-            return bet*5;
-        } else if(score === 'Straight'){
-            return bet*4;
-        } else if(score === 'Three of a Kind'){
-            return bet*3;
-        } else if(score === 'Two Pairs'){
-            return bet*2;
-        } else if(score === 'One Pairs'){
-            return bet*1;
+  checkHand(playersHand) {
+    playersHand.sort(function (card1, card2) {
+      if (card1.rank > card2.rank) {
+        return 1;
+      } else if (card1.rank < card2.rank) {
+        return -1;
+      } else {
+        if (card1.suit > card2.suit) {
+          return 1;
+        } else if (card1.suit < card2.rank) {
+          return -1;
         } else {
-            return 0;
+          return 0;
         }
+      }
+    });
+
+    console.log(playersHand);
+
+    if (
+      this.consecutive(playersHand) === 1 &&
+      this.flush(playersHand) == true
+    ) {
+      return "Royal FLush";
+    } else if (
+      this.consecutive(playersHand) === 2 &&
+      this.flush(playersHand) == true
+    ) {
+      return "Straight Flush";
+    } else if (this.fourKind(playersHand) === true) {
+      return "Four of a Kind";
+    } else if (this.full(playersHand) === true) {
+      return "Full House";
+    } else if (
+      this.consecutive(playersHand) === 0 &&
+      this.flush(playersHand) == true
+    ) {
+      return "Flush";
+    } else if (
+      (this.consecutive(playersHand) === 2 &&
+        this.flush(playersHand) == false) ||
+      (this.consecutive(playersHand) === 1 && this.flush(playersHand) == false)
+    ) {
+      return "Straight";
+    } else if (this.threeKind(playersHand) === true) {
+      return "Three of a Kind";
+    } else if (this.twoPair(playersHand) === true) {
+      return "Two Pairs";
+    } else if (this.onePair(playersHand) === true) {
+      return "One Pairs";
+    } else {
+      return "No Pair";
+    }
+  }
+
+  consecutive(playersHand) {
+    //checks if cards are in consec order
+    let con = 0;
+
+    //checks for royal flush
+    if (playersHand[0].getRank() === 1 && playersHand[1].getRank() === 10) {
+      for (let i = 2; i < 4; i++) {
+        if (playersHand[i].getRank() + 1 === playersHand[i + 1].getRank()) {
+          con += 1;
+        }
+      }
+      //checks for straight or straight flush
+    } else {
+      for (let i = 0; i < 4; i++) {
+        if (playersHand[i].getRank() + 1 === playersHand[i + 1].getRank()) {
+          con += 2;
+        }
+      }
     }
 
-    checkHand(playersHand){
-        
- 
-        playersHand.sort(function(card1, card2){
-            if(card1.rank > card2.rank){
-                return 1;
-    
-            }else if(card1.rank < card2.rank){
-                return -1;
-    
-            }else{
-                if (card1.suit > card2.suit){
-                    return 1;
-    
-                }else if (card1.suit < card2.rank){
-                    return -1;
-                }
-                else{
-                    return 0;
-                }
-            }
-        });
+    if (con === 3) {
+      return 1; //royal flush or straight flush or straight
+    } else if (con === 8) {
+      return 2; //straight flush or straight
+    } else {
+      return 0; //not consecutive
+    }
+  }
 
-        console.log(playersHand);
+  flush(playersHand) {
+    //checks if all the suits are the same
+    let match = 0;
 
-        if (this.consecutive(playersHand) === 1 && this.flush(playersHand) == true){
-            return "Royal FLush";
-
-        } else if (this.consecutive(playersHand) === 2 && this.flush(playersHand) == true){
-            return "Straight Flush";
-
-        } else if (this.fourKind(playersHand) === true){
-            return "Four of a Kind";
-
-        } else if (this.full(playersHand) === true){
-            return "Full House";
-
-        } else if (this.consecutive(playersHand) === 0 && this.flush(playersHand) == true){
-            return "Flush";
-
-        } else if (this.consecutive(playersHand) === 2 && this.flush(playersHand) == false || this.consecutive(playersHand) === 1 && this.flush(playersHand) == false){
-            return "Straight";
-
-        } else if (this.threeKind(playersHand) === true){
-            return "Three of a Kind";
-
-        } else if (this.twoPair(playersHand) === true){
-            return "Two Pairs";
-
-        } else if (this.onePair(playersHand) === true){
-            return "One Pairs";
-
-        } else {
-            return "No Pair";
-        }        
+    for (let i = 0; i < 4; i++) {
+      if (playersHand[i].getSuit() === playersHand[i + 1].getSuit()) {
+        match += 1;
+      }
     }
 
-    consecutive(playersHand){ //checks if cards are in consec order
-        let con = 0; 
+    if (match === 4) return true;
+    else return false;
+  }
 
-        //checks for royal flush
-        if (playersHand[0].getRank() === 1 && playersHand[1].getRank() === 10){
-            for (let i=2; i<4; i++){
-                if (playersHand[i].getRank()+1 === playersHand[i+1].getRank()){
-                    con += 1;
-                }
-            }
-        //checks for straight or straight flush
-        }else{
-            for (let i=0; i<4; i++){
-                if (playersHand[i].getRank()+1 === playersHand[i+1].getRank()){
-                    con += 2;
-                }
-            }
-        }
-
-        if (con === 3){
-            return 1;//royal flush or straight flush or straight
-        }else if (con === 8){
-            return 2;//straight flush or straight
-        }else{
-            return 0;//not consecutive
-        }
+  full(playersHand) {
+    //checks for 2 of one rank and three of another rank
+    //example: 2 2 4 4 4
+    if (
+      playersHand[0].getRank() === playersHand[1].getRank() &&
+      playersHand[2].getRank() === playersHand[3].getRank() &&
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
     }
-
-    flush(playersHand){ //checks if all the suits are the same
-        let match = 0;
-
-        for (let i=0; i<4; i++){
-            if(playersHand[i].getSuit() === playersHand[i+1].getSuit()){
-                match +=1;
-            }
-        }
-
-        if(match === 4)
-            return true;
-        else
-            return false;
+    //example: 2 2 2 4 4
+    else if (
+      playersHand[0].getRank() === playersHand[1].getRank() &&
+      playersHand[1].getRank() === playersHand[2].getRank() &&
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    full(playersHand){ //checks for 2 of one rank and three of another rank
-        //example: 2 2 4 4 4
-        if(playersHand[0].getRank() === playersHand[1].getRank() 
-            && playersHand[2].getRank() === playersHand[3].getRank() 
-            && playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-        }
-        //example: 2 2 2 4 4
-        else if (playersHand[0].getRank() === playersHand[1].getRank() 
-        && playersHand[1].getRank() === playersHand[2].getRank() 
-        && playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-        }
-        else{
-            return false;
-        }
+  fourKind(playersHand) {
+    //checks for four with the same rank
+    //example 2 2 2 2 4
+    if (
+      playersHand[0].getRank() === playersHand[1].getRank() &&
+      playersHand[1].getRank() === playersHand[2].getRank() &&
+      playersHand[2].getRank() === playersHand[3].getRank()
+    ) {
+      return true;
     }
-    
-    fourKind(playersHand){ //checks for four with the same rank
-        //example 2 2 2 2 4
-        if(playersHand[0].getRank() === playersHand[1].getRank() 
-        && playersHand[1].getRank() === playersHand[2].getRank() 
-        && playersHand[2].getRank() === playersHand[3].getRank()){
-            return true;
-
-        }
-        //example 4 5 5 5 5
-        else if(playersHand[1].getRank() === playersHand[2].getRank() 
-        && playersHand[2].getRank() === playersHand[3].getRank() 
-        && playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-
-        } 
-        else{
-            return false;
-        }
+    //example 4 5 5 5 5
+    else if (
+      playersHand[1].getRank() === playersHand[2].getRank() &&
+      playersHand[2].getRank() === playersHand[3].getRank() &&
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    threeKind(playersHand){
-        //example: 2 2 2 4 5
-        if(playersHand[0].getRank() === playersHand[1].getRank() 
-        && playersHand[1].getRank() === playersHand[2].getRank()){
-            return true;
-        }
-        //example: 2 4 4 4 5
-        else if(playersHand[1].getRank() === playersHand[2].getRank() 
-        && playersHand[2].getRank() === playersHand[3].getRank()){
-            return true;
-        }
-        //example: 2 4 5 5 5
-        else if(playersHand[2].getRank() === playersHand[3].getRank() 
-        && playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-        } 
-        else{
-            return false;
-        }
+  threeKind(playersHand) {
+    //example: 2 2 2 4 5
+    if (
+      playersHand[0].getRank() === playersHand[1].getRank() &&
+      playersHand[1].getRank() === playersHand[2].getRank()
+    ) {
+      return true;
     }
-
-    twoPair(playersHand){
-        // example: 2 2 4 4 5
-        if(playersHand[0].getRank() === playersHand[1].getRank() 
-            && playersHand[2].getRank() === playersHand[3].getRank()){
-            return true;
-        }
-        // example: 5 6 6 7 7
-        else if(playersHand[1].getRank() === playersHand[2].getRank() 
-            && playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-        }
-        // example: 5 5 6 7 7
-        else if(playersHand[0].getRank() === playersHand[1].getRank() 
-        && playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-        }   
-        else{
-            return false;
-        }
+    //example: 2 4 4 4 5
+    else if (
+      playersHand[1].getRank() === playersHand[2].getRank() &&
+      playersHand[2].getRank() === playersHand[3].getRank()
+    ) {
+      return true;
     }
-
-    onePair(playersHand){
-        if(playersHand[0].getRank() === playersHand[1].getRank() 
-            || playersHand[1].getRank() === playersHand[2].getRank()
-            || playersHand[2].getRank() === playersHand[3].getRank()
-            || playersHand[3].getRank() === playersHand[4].getRank()){
-            return true;
-        } else{
-            return false;
-        }
+    //example: 2 4 5 5 5
+    else if (
+      playersHand[2].getRank() === playersHand[3].getRank() &&
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
+  twoPair(playersHand) {
+    // example: 2 2 4 4 5
+    if (
+      playersHand[0].getRank() === playersHand[1].getRank() &&
+      playersHand[2].getRank() === playersHand[3].getRank()
+    ) {
+      return true;
+    }
+    // example: 5 6 6 7 7
+    else if (
+      playersHand[1].getRank() === playersHand[2].getRank() &&
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
+    }
+    // example: 5 5 6 7 7
+    else if (
+      playersHand[0].getRank() === playersHand[1].getRank() &&
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onePair(playersHand) {
+    if (
+      playersHand[0].getRank() === playersHand[1].getRank() ||
+      playersHand[1].getRank() === playersHand[2].getRank() ||
+      playersHand[2].getRank() === playersHand[3].getRank() ||
+      playersHand[3].getRank() === playersHand[4].getRank()
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 //const game = new Game(/*prompt().split(" ")*/).play();

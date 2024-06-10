@@ -3,7 +3,7 @@
 class Card {
 
     static suits = ["Clubs", "Diamonds", "Hearts", "Spades"];
-    static ranks = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"];
+    static ranks = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"];
     
     constructor(s, r){
         this.suit = s;

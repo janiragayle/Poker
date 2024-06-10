@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poker Game</title>
     <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
 
 </head>
 <body>
@@ -11,16 +12,20 @@
     <div class="wrapper">
         <div class="text">
             <h1>Welcome to Poker!</h1>
-            <p>Welcome to Poker!</p>
+            <p></p>
         </div>
 
         <form class="options" action="userResponse">
-            <div class= "buttons">
+            <div class= "play">
+                <input type="button" id="play" value="Lets Play!">
+            </div>
+            <div class= "yesNo">
                 <input type="button" id="yes" value="Yes">
                 <input type="button" id="no" value="No">
             </div>
             <div class="newBets">
                 <input type="text" name="bet" id="bet">
+                <input type="button" id="submit" value="BET" >
             </div>
         </form>
         <div class="cards">

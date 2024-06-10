@@ -21,15 +21,41 @@ body{
 }
 
 p{
+    font-size: 25px;
+}
+
+.newBets input[id="bet"]{
+    display: none;
+}
+
+.show-Bet input[id="bet"]{
+    display: inline;
+    text-align: center;
+    width: 100px;
+    height: 50px;
     font-size: 20px;
+    color: azure;
+    background-color:rgb(181, 73, 91);
+}
+
+.newBets input[id="submit"]{
     display: none;
 }
 
-.newBets input[type="text"]{
-    display: none;
+.show-Bet input[id="submit"]{
+    display: inline;
+    text-align: center;
+    width: 60px;
+    height: 30px;
+    font-size: 20px;
+    color: azure;
+    background-color:rgb(181, 73, 91);
+    margin: 5px;
 }
 
-.buttons input[type="button"]{
+
+
+.yesNo input[type="button"]{
     font-size: 20;
     color: azure;
     padding: 10px;
@@ -42,8 +68,24 @@ p{
     display: none;
 }
 
-.buttons input[type="button"]:hover{
-    transform: scale(1.05);
+.play input[type="button"]{
+    font-size: 20;
+    color: azure;
+    padding: 10px;
+    border: 2px solid rgb(181, 73, 91);
+    border-radius: 10px;
+    background-color: rgb(181, 73, 91);
+    margin: 10px;
+    cursor: pointer;
+    transition: transform(0.2s); 
+}
+
+.play-Clicked input[type="button"]{
+    display: none;
+}
+
+.buttons input[type="button"]:hover ,.play input[type="button"]:hover{
+    transform: scale(1.1);
 }
 /*Cards*/
 
