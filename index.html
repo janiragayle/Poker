@@ -4,7 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poker Game</title>
     <link rel="stylesheet" href="style.css">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
 
 </head>
 <body>
@@ -38,18 +37,48 @@
             <img class="card" src="/card_deck/card_back.png" alt="">
             <img class="card" src="/card_deck/card_back.png" alt="">
         </div>
-        <div class="points">
-            <div class="tokens">
-                Number of Tokens: 0
+        <div class="lowerContainer">
+            <div class="points">
+                <div class="tokens">
+                    Number of Tokens: 0
+                </div>
+                <div class="currentBets">
+                    Current Bet: 0
+                </div>
             </div>
-            <div class="currentBets">
-                Current Bet: 0
+
+
+            <div class="ruleContainer" >
+                <div class="rules">
+                    Rules
+                </div>
+
+                <div class="dropdownBackground">
+                    <span class="arrow"></span>
+                </div>
+                
+                <div class="ruleDropdown">
+                    <div class="ruleDescription">
+                      <img src="/card_deck/rankings.jpg">
+                      <p>Above are the nine hand rankings you need to win.</p>
+                      <p> Heres how much you win if you get a... 
+                        <br> Royal Flush: Your bet * 250
+                        <br> Straight Flush: Your bet * 50
+                        <br> Four of a kind: Your bet * 25
+                        <br> Full House: Your bet * 6
+                        <br> Flush: Your bet * 5
+                        <br> Straight: Your bet * 4
+                        <br> Three of a Kind: Your bet * 3
+                        <br> Two Pair: Your bet * 2
+                        <br> One Pair: Your bet * 1
+                     </p>
+                    </div>
+                  </div>
+
+
             </div>
         </div>
-        
-
     </div>
-
 
 
     <script src="Card.js"></script>

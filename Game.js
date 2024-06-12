@@ -20,7 +20,6 @@ const visibleText = document.querySelector(".text");
 let newH1 = document.querySelector("h1");
 
 /* Functions */
-
 function updateTokens(newTokens) {
   //updates the tokens throughout the game
   tokens.innerText = `Number of Tokens: ${newTokens}`;
@@ -42,16 +41,47 @@ function updateBets(newBet){
 }
 
 /* Event Listeners */
-
-//start game when "Lets Play is clicked"
-playButton.addEventListener("click", setGame);
+playButton.addEventListener("click", setGame);//start game when "Lets Play is clicked"
 
 
+const triggerRule = document.querySelector(".ruleContainer");
+const background = document.querySelector(".dropdownBackground");
+const lowerContainer = document.querySelector(".lowerContainer");
+const dropDown = document.querySelector(".ruleDropdown");
+const arrow = document.querySelector(".arrow");
+
+function handleEnter(){
+  this.classList.add("rules-enter");
+  setTimeout(() => {
+    this.classList.add("rules-enter-active")
+  }, 150)
+  background.classList.add("open");
+  
+  const dropDownCoords = dropDown.getBoundingClientRect();
+  const navCoords = triggerRule.getBoundingClientRect();
+  
+  const coords = {
+    height: dropDownCoords.height,
+    width: dropDownCoords.width - 70,
+    top: dropDownCoords.top - navCoords.top,
+    right: dropDownCoords.left - navCoords.right + 130,
+  }
+  console.log(navCoords.top, coords.top);
+
+  background.style.setProperty('width', `${coords.width}px`);
+  background.style.setProperty('height', `${coords.height}px`);
+  background.style.setProperty('transform', `translate(${coords.right}px, ${coords.top}px) `);
+  arrow.style.setProperty('transform', `translate(${triggerRule.bottom}px`);
+}
 
 
+function handleLeave(){
+  this.classList.remove("rules-enter", "rules-enter-active");
+  background.classList.remove("open");
+}
 
-
-
+triggerRule.addEventListener("mouseenter", handleEnter);
+triggerRule.addEventListener("mouseleave", handleLeave);
 /*************** Game Constructor and Play() function ********************/
 
 class Game {
@@ -246,95 +276,6 @@ class Game {
         this.resetCardImages();
         yesNoButtons.classList.remove("show-yesNo");
       }
-      
-    
-      /*
-      this.player.bets(bets); //take bet
-      this.player.takeBankroll(bets); //subtract bet from bankroll
-
-      alert("You have " + this.player.getBankroll() + " tokens remaining"); //tell player remaining bankroll
-
-      this.deck.shuffle(); //shuffle cards
-
-      let i = 0;
-      while (i < 5) {
-        //adds 5 random cards to player's hand
-        this.player.addCard(this.deck.deal(i));
-        i++;
-      }
-      //alert(this.player.getHand());
-      //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
-
-      for (let i = 0; i < 5; i++) {
-        //asks if they want to change any of their cards
-        let answer = prompt(
-          "Here is your hand: \n\n" +
-            this.player.getCard(0) +
-            "\n" +
-            this.player.getCard(1) +
-            "\n" +
-            this.player.getCard(2) +
-            "\n" +
-            this.player.getCard(3) +
-            "\n" +
-            this.player.getCard(4) +
-            "\n\n" +
-            "Do you want to change #" +
-            (i + 1) +
-            " in your hand? \n\n Enter y/n"
-        );
-
-        if (answer === "y") {
-          this.changeHand(i);
-          //console.log("\n");
-          //console.log(`Here is your hand: \n1. ${this.player.getCard(0)}\n2. ${this.player.getCard(1)}\n3. ${this.player.getCard(2)}\n4. ${this.player.getCard(3)}\n5. ${this.player.getCard(4)}`);
-        }
-      }
-
-      alert(
-        "Here is your final hand: \n\n" +
-          this.player.getCard(0) +
-          "\n" +
-          this.player.getCard(1) +
-          "\n" +
-          this.player.getCard(2) +
-          "\n" +
-          this.player.getCard(3) +
-          "\n" +
-          this.player.getCard(4) +
-          "\n\n"
-      );
-
-      const playersHand = [];
-
-      for (let i = 0; i < 5; i++) {
-        playersHand.push(this.player.getCard(i));
-      }
-
-      const score = this.checkHand(playersHand);
-
-      const won = this.winnings(score, this.player.getBet());
-
-      this.player.adjustBankroll(won);
-
-      alert(
-        "Thats a " +
-          score +
-          " \n\nYou won " +
-          won +
-          " tokens! \n\nYour bankroll is:  " +
-          this.player.getBankroll() +
-          " tokens."
-      );
-
-      if (prompt("Do you want to play again?") === "n") {
-        break;
-      } else if (this.player.getBankroll() === 0) {
-        console.log("Sorry bud, you're out of tokens. Head on home.");
-        break;
-      } else {
-        this.player.clearHand();
-      }*/
     }
   }
 
