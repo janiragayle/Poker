@@ -24,37 +24,48 @@ p{
     font-size: 25px;
 }
 
-.newBets input[id="bet"]{
+/*Bet Text Space and Button*/
+.newBets input[type="text"]{
     display: none;
-}
-
-.show-Bet input[id="bet"]{
-    display: inline;
     text-align: center;
     width: 100px;
     height: 50px;
     font-size: 20px;
     color: azure;
     background-color:rgb(181, 73, 91);
+    border: 2px solid azure;
+    cursor: pointer;
 }
 
-.newBets input[id="submit"]{
-    display: none;
-}
-
-.show-Bet input[id="submit"]{
+.show-Bet input[type="text"]{
     display: inline;
+}
+
+.newBets input[type="button"]{
+    display: none;
     text-align: center;
     width: 60px;
     height: 30px;
     font-size: 20px;
     color: azure;
     background-color:rgb(181, 73, 91);
-    margin: 5px;
+    margin: 15px;
+    cursor: pointer;
+    border: 2px solid azure;
 }
 
+.show-Bet input[type="button"]{
+    display: inline;
+}
 
+.newBets input[type="button"]:hover{
+    transform: scale(1.08);
+    background-color: azure;
+    color: rgb(181, 73, 91);
 
+}
+
+/* Yes and No Buttons*/
 .yesNo input[type="button"]{
     font-size: 20;
     color: azure;
@@ -76,6 +87,7 @@ p{
     display: inline;
 }
 
+/* Play and Start Over Button */
 .play input[id="play"]{
     font-size: 20;
     color: azure;
@@ -112,8 +124,8 @@ p{
 .buttons input[type="button"]:hover ,.play input[type="button"]:hover{
     transform: scale(1.1);
 }
-/*Cards*/
 
+/*Cards*/
 .cards{
     display: flex;
     justify-content: center;
@@ -127,7 +139,8 @@ p{
     margin: 10px 10px;
     transition: transform(0.2);
     cursor: pointer;
-    border: 2px solid #fff;
+    border: 1px solid black;
+    border-radius: 10px;
     box-shadow: 0 0px 10px rgb(0, 0 , 0, 1);
 }
 
@@ -135,8 +148,13 @@ p{
     transform: scale(1.05);
 }
 
-/*Points System*/
+.glow{
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    box-shadow: 0 0px 30px rgb(255, 247, 247);
+}
 
+/*Points System*/
 .points{
     display: flex;
     justify-content: space-around;

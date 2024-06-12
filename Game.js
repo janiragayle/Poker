@@ -101,11 +101,29 @@ class Game {
     this.deck = new Deck();
   }
 
-  async waitForBet(){
+  async waitForBet(userBankroll){
     return new Promise((resolve) => {
         betButton.addEventListener("click", () => {
-            const bet = parseInt(betInput.value);
-            resolve(bet);
+          let goodResponse = false;
+          const bet = parseFloat(betInput.value);
+          console.log(bet);
+
+            if (!Number.isInteger(bet) || !(bet % 1 === 0)) { //checks if input is an integer
+              newP.textContent = `Please enter a whole number.`;
+            } else if (bet < 1){ //checks if input is greater than 1
+              newP.textContent = `You have to bet at least 1 token.`;
+            } else if (bet > userBankroll) { //checks if input is greater than bankroll
+              newP.textContent = `You can only bet at most ${userBankroll} tokens right now.`;
+            } else {
+              goodResponse = true;
+            }
+          
+            if (goodResponse){
+              resolve(bet);
+            } else {
+              resolve("bad response");
+            }
+            
         }, {once: true});
     }); 
   }
@@ -139,7 +157,12 @@ class Game {
       newP.textContent = `How many tokens would you like to bet?`;
       newBets.classList.add("show-Bet");
 
-        const bet = await this.waitForBet();
+        console.log("before entering bet");
+        let bet = await this.waitForBet(this.player.getBankroll());
+
+        while (bet === 'bad response'){
+          bet = await this.waitForBet(this.player.getBankroll());
+        }
 
         updateBets(bet);
         this.player.bets(parseInt(bet));
@@ -167,13 +190,15 @@ class Game {
       for (let i = 0; i < 5; i++) { 
         newP.textContent = `Do you want to change #${i + 1} in your hand?`;
         yesNoButtons.classList.add("show-yesNo");
-
+        cardImages[i].classList.add("glow");
+        
         const answer = await this.waitForYesNo();
-
+        
         if(answer === 'yes'){
           this.changeHand(i);
           this.updateCardImage(this.player.getCard(i), i);
         }
+        cardImages[i].classList.remove("glow");
       }
 
       const playersHand = [];
