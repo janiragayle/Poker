@@ -103,6 +103,13 @@ class Game {
 
   async waitForBet(userBankroll){
     return new Promise((resolve) => {
+        betInput.addEventListener("keypress", (e)=>{
+          if(e.key === 'Enter'){
+            e.preventDefault();
+          }
+        })
+
+
         betButton.addEventListener("click", () => {
           let goodResponse = false;
           const bet = parseFloat(betInput.value);

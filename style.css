@@ -144,14 +144,12 @@ p{
     box-shadow: 0 0px 10px rgb(0, 0 , 0, 1);
 }
 
-.card:hover{
-    transform: scale(1.05);
-}
-
 .glow{
     border: 1px solid rgb(0, 0, 0);
     border-radius: 10px;
     box-shadow: 0 0px 30px rgb(255, 247, 247);
+    transform: scale(1.05);
+    margin: 3px;
 }
 
 /*Points System*/
